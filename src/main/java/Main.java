@@ -33,8 +33,8 @@ public class Main {
 //        employeeService.showAllDepartments(departmentService);
 
 // Вывод информации о всех сотрудниках департамента "depName"
-        String depName = "Отдел продвижения";
-        employeeService.showEmployeesByDepartment(employees, depName);
+//        String depName = "Отдел продвижения";
+//        employeeService.showEmployeesByDepartment(employees, depName);
     }
 
     public static void createEmployeesBaseFromFile (String fileName) throws IOException {
