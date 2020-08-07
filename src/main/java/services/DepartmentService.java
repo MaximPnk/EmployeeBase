@@ -21,7 +21,7 @@ public class DepartmentService {
 
 //    Создание списка департаментов
     public Department createNewDepartment(String title) {
-        if (departments.containsKey(title)) {
+        if (departments.get(title) != null) {
             return departments.get(title);
         }
         Department department = new Department();

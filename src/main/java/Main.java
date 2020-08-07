@@ -27,13 +27,13 @@ public class Main {
         employeeService.showAllEmployeesInfo(employees);
         System.out.println();
 
-/*// Вывод всех департаментов компании
+// Вывод всех департаментов компании
         departmentService.showAllDepartments();
         System.out.println();
 
 // Вывод информации о всех сотрудниках департамента "depName"
         String depName = "Департамент развития производства";
-        employeeService.showEmployeesByDepartment(depName);*/
+        employeeService.showEmployeesByDepartment(depName);
     }
 
     public static void createEmployeesBaseFromFile (String fileName) throws IOException {

@@ -1,12 +1,12 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Department {
-    private List<Employee> includedEmployees = new ArrayList<>();
+    private Set<Employee> includedEmployees = new TreeSet<>();
 
-    public List<Employee> getIncludedEmployees() {
+    public Set<Employee> getIncludedEmployees() {
         return includedEmployees;
     }
 }
