@@ -2,13 +2,12 @@ package services;
 
 import models.Department;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DepartmentService {
     private static DepartmentService instance;
-    private Set<Department> departments = new HashSet<>();
-    private Department department;
+    private Map<String, Department> departments = new HashMap();
 
     private DepartmentService() {
     }
@@ -22,17 +21,25 @@ public class DepartmentService {
 
 //    Создание списка департаментов
     public Department createNewDepartment(String title) {
-        for (Department dep: departments) {
-            if (dep.getTitle().equals(title)) {
-                return dep;
-            }
+        if (departments.containsKey(title)) {
+            return departments.get(title);
         }
-        department = new Department(title);
-        departments.add(department);
+        Department department = new Department();
+        departments.put(title , department);
         return department;
     }
 
-    public Set<Department> getDepartments() {
+    public void showAllDepartments() {
+        for (Map.Entry<String, Department> pair : departments.entrySet()) {
+            System.out.println(pair.getKey());
+        }
+    }
+
+    public Map<String, Department> getDepartments() {
         return departments;
+    }
+
+    public void setDepartments(Map<String, Department> departments) {
+        this.departments = departments;
     }
 }

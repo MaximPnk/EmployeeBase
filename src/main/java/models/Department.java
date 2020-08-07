@@ -1,18 +1,12 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Department {
-    private String title;
+    private List<Employee> includedEmployees = new ArrayList<>();
 
-    public Department(String title) {
-        this.title = title;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    @Override
-    public String toString() {
-        return title;
+    public List<Employee> getIncludedEmployees() {
+        return includedEmployees;
     }
 }

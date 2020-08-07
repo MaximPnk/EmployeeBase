@@ -1,12 +1,13 @@
 package services;
 
-import models.Department;
 import models.Employee;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 public class EmployeeService {
     private static EmployeeService instance;
+    private static DepartmentService departmentService = DepartmentService.getInstance();
 
     private EmployeeService() {
     }
@@ -18,35 +19,14 @@ public class EmployeeService {
         return instance;
     }
 
-    public void showAllEmployeesInfo(Set<Employee> employees) {
-        for (Employee empl : employees) {
-            System.out.println(empl);
-        }
+    public void createEmployee(Set<Employee> employees, String name, String email, String position) {
+        employees.add(new Employee(name, email, position));
     }
 
-    public void showAllDepartments(DepartmentService departmentService) {
-        for (Department dep : departmentService.getDepartments()) {
-            System.out.println(dep);
-        }
-    }
-
-    public void showEmployeesByDepartment(Set<Employee> employees, String depName) {
-        for (Employee emp: employees) {
-            if (emp.getDepartment().getTitle().equals(depName)) {
-                System.out.println(emp);
-            }
-        }
-    }
-
-    public void createEmployee(Set<Employee> employees, String name, String email, Department department, String position) {
-        employees.add(new Employee(name, email, department, position));
-    }
-
-    public void updateEmployee(Set<Employee> employees, String name, String newEmail, Department newDepartment, String newPosition) {
+    public void updateEmployee(Set<Employee> employees, String name, String newEmail, String newPosition) {
         for (Employee empl: employees) {
             if (empl.getName().equals(name)) {
                 empl.setEmail(newEmail);
-                empl.setDepartment(newDepartment);
                 empl.setPosition(newPosition);
             }
         }
@@ -56,6 +36,20 @@ public class EmployeeService {
         for (Employee empl: employees) {
             if (empl.getName().equals(name)) {
                 employees.remove(empl);
+            }
+        }
+    }
+
+    public void showAllEmployeesInfo(Set<Employee> employees) {
+        for (Employee empl : employees) {
+            System.out.println(empl);
+        }
+    }
+
+    public void showEmployeesByDepartment(String depName) {
+        if (departmentService.getDepartments().containsKey(depName)) {
+            for (Employee emp : departmentService.getDepartments().get(depName).getIncludedEmployees()) {
+                System.out.println(emp);
             }
         }
     }
