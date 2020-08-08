@@ -2,8 +2,11 @@ package services;
 
 import models.Employee;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Set;
-import java.util.TreeSet;
 
 public class EmployeeService {
     private static EmployeeService instance;
@@ -19,15 +22,16 @@ public class EmployeeService {
         return instance;
     }
 
-    public void createEmployee(Set<Employee> employees, String name, String email, String position) {
-        employees.add(new Employee(name, email, position));
+    public void createEmployee(Set<Employee> employees, String name, String email, String position, BigDecimal salary) {
+        employees.add(new Employee(name, email, position, salary));
     }
 
-    public void updateEmployee(Set<Employee> employees, String name, String newEmail, String newPosition) {
+    public void updateEmployee(Set<Employee> employees, String name, String newEmail, String newPosition, BigDecimal newSalary) {
         for (Employee empl: employees) {
             if (empl.getName().equals(name)) {
                 empl.setEmail(newEmail);
                 empl.setPosition(newPosition);
+                empl.setSalary(newSalary);
             }
         }
     }
@@ -52,5 +56,12 @@ public class EmployeeService {
                 System.out.println(emp);
             }
         }
+    }
+
+    public void inWhichDepCanEmpMove(String name, String fileName) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true));
+                
+
+        writer.close();
     }
 }

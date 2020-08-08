@@ -20,7 +20,7 @@ public class DepartmentService {
     }
 
 //    Создание списка департаментов
-    public Department createNewDepartment(String title) {
+    public Department checkIfDepartmentAlreadyCreated(String title) {
         if (departments.get(title) != null) {
             return departments.get(title);
         }
@@ -31,7 +31,7 @@ public class DepartmentService {
 
     public void showAllDepartments() {
         for (Map.Entry<String, Department> pair : departments.entrySet()) {
-            System.out.println(pair.getKey());
+            System.out.printf("%-40sСредняя з/п = %s\n", pair.getKey(), pair.getValue().averageDepartmentSalary());
         }
     }
 

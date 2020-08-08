@@ -1,14 +1,18 @@
 package models;
 
+import java.math.BigDecimal;
+
 public class Employee implements Comparable {
     private String name;
     private String email;
     private String position;
+    private BigDecimal salary;
 
-    public Employee(String name, String email, String position) {
+    public Employee(String name, String email, String position, BigDecimal salary) {
         this.name = name;
         this.email = email;
         this.position = position;
+        this.salary = salary;
     }
 
     public String getName() {
@@ -35,6 +39,14 @@ public class Employee implements Comparable {
         this.position = position;
     }
 
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
+    }
+
     @Override
     public int compareTo(Object o) {
         return this.name.compareTo(((Employee) o).name);
@@ -42,7 +54,7 @@ public class Employee implements Comparable {
 
     @Override
     public String toString() {
-        return String.format("%-40s%-40s%s", name, email, position);
+        return String.format("%-40s%-40s%-40s%s", name, email, position, salary);
     }
 
 }

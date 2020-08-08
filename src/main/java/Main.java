@@ -4,6 +4,7 @@ import services.DepartmentService;
 import services.EmployeeService;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -19,8 +20,8 @@ public class Main {
 
 
 // Create + Update + Delete
-        employeeService.createEmployee(employees, "Яхелева Маргарита Владиславовна", "sup@innotechnum.com", "sup");
-        employeeService.updateEmployee(employees, "Яхелева Маргарита Владиславовна", "sup@ts.com", "sup");
+        employeeService.createEmployee(employees, "Яхелева Маргарита Владиславовна", "sup@innotechnum.com", "sup", new BigDecimal("1000"));
+        employeeService.updateEmployee(employees, "Яхелева Маргарита Владиславовна", "sup@ts.com", "sup", new BigDecimal("2000"));
         employeeService.deleteEmployee(employees, "Яхелева Маргарита Владиславовна");
 
 // Вывод информации о всех сотрудниках компании
@@ -34,36 +35,66 @@ public class Main {
 // Вывод информации о всех сотрудниках департамента "depName"
         String depName = "Департамент развития производства";
         employeeService.showEmployeesByDepartment(depName);
+
+// Вывод в файл возможных перемещений сотрудника
+        String empName = "Никитин Вениамин Германнович";
+        try {
+            employeeService.inWhichDepCanEmpMove(empName, args[1]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void createEmployeesBaseFromFile (String fileName) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+    public static void createEmployeesBaseFromFile (String fileName) throws FileNotFoundException {
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(fileName));
+        } catch (FileNotFoundException e) {
+            throw new FileNotFoundException("Файл с данными не найден");
+        }
         String line;
 
-        while (reader.ready()) {
-            line = reader.readLine();
+        try {
+            while (reader.ready()) {
+                line = reader.readLine();
 
-            if (line.length() > 0) {
-                String name, email, position;
-                Department department;
+                if (line.length() > 0) {
+                    String name, email, position;
+                    Department department;
+                    BigDecimal salary;
 
-                name = line.split("#")[0].trim();
+                    name = line.split("#")[0].trim();
 
-                email = line.split("#")[1].trim();
-                if (!email.contains("@")) {
-                    email = "----------";
+                    email = line.split("#")[1].trim();
+                    if (!email.matches(".*@.*\\.(com|ru|net)")) {
+                        email = "INVALID EMAIL";
+                    }
+
+                    department = departmentService.checkIfDepartmentAlreadyCreated(line.split("#")[2].trim());
+
+                    position = line.split("#")[3];
+
+                    try {
+                        salary = new BigDecimal(line.split("#")[4].trim());
+                    } catch (NumberFormatException e) {
+                        System.out.printf("У работника %s введена некорректная з/п. Он не будет включен в базу.\n", name);
+                        continue;
+                    }
+
+                    if (salary.compareTo(new BigDecimal("999999")) == 1) {
+                        System.out.printf("У работника %s з/п >= 1.000.000, обратите внимание.\n", name);
+                    }
+
+                    Employee tmpEmp = new Employee(name, email, position, salary);
+                    employees.add(tmpEmp);
+                    department.getIncludedEmployees().add(tmpEmp);
                 }
-
-                department = departmentService.createNewDepartment(line.split("#")[2].trim());
-
-                position = line.split("#")[3];
-
-                Employee tmpEmp = new Employee(name, email, position);
-                employees.add(tmpEmp);
-                department.getIncludedEmployees().add(tmpEmp);
             }
-        }
 
-        reader.close();
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println();
     }
 }
