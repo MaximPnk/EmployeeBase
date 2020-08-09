@@ -5,13 +5,12 @@ import services.EmployeeService;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.util.Set;
-import java.util.TreeSet;
+
+import static services.EmployeeService.employees;
 
 public class Main {
     public static DepartmentService departmentService = DepartmentService.getInstance();
     public static EmployeeService employeeService = EmployeeService.getInstance();
-    public static Set<Employee> employees = new TreeSet<>();
 
     public static void main(String[] args) throws IOException {
 
@@ -20,12 +19,12 @@ public class Main {
 
 
 // Create + Update + Delete
-        employeeService.createEmployee(employees, "Яхелева Маргарита Владиславовна", "sup@innotechnum.com", "sup", new BigDecimal("1000"));
-        employeeService.updateEmployee(employees, "Яхелева Маргарита Владиславовна", "sup@ts.com", "sup", new BigDecimal("2000"));
-        employeeService.deleteEmployee(employees, "Яхелева Маргарита Владиславовна");
+        employeeService.createEmployee("Яхелева Маргарита Владиславовна", "sup@innotechnum.com", "sup", new BigDecimal("1000"));
+        employeeService.updateEmployee("Яхелева Маргарита Владиславовна", "sup@ts.com", "sup", new BigDecimal("2000"));
+        employeeService.deleteEmployee("Яхелева Маргарита Владиславовна");
 
 // Вывод информации о всех сотрудниках компании
-        employeeService.showAllEmployeesInfo(employees);
+        employeeService.showAllEmployeesInfo();
         System.out.println();
 
 // Вывод всех департаментов компании
@@ -33,11 +32,12 @@ public class Main {
         System.out.println();
 
 // Вывод информации о всех сотрудниках департамента "depName"
-        String depName = "Департамент развития производства";
+        String depName = "Руководство компании";
         employeeService.showEmployeesByDepartment(depName);
+        System.out.println();
 
 // Вывод в файл возможных перемещений сотрудника
-        String empName = "Никитин Вениамин Германнович";
+        String empName = "Одинцов Дмитрий Лукьянович";
         try {
             employeeService.inWhichDepCanEmpMove(empName, args[1]);
         } catch (IOException e) {
