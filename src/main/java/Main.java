@@ -66,7 +66,7 @@ public class Main {
                     name = line.split("#")[0].trim();
 
                     email = line.split("#")[1].trim();
-                    if (!email.matches(".*@.*\\.(com|ru|net)")) {
+                    if (!email.matches("[\\w]*@[a-zA-Z]*\\.(com|ru|net)")) {
                         email = "INVALID EMAIL";
                     }
 

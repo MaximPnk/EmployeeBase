@@ -120,7 +120,7 @@ public class EmployeeService {
             BigDecimal dif = avSalAfter.subtract(avSalBefore);
             if (dif.abs().equals(dif)) {
                 count++;
-                writer.append(String.format("Можно переместить в департамент %s. Средняя з/п вырастет с %s до %s\n", dep.getKey(), avSalBefore, avSalAfter));
+                writer.append(String.format("Можно переместить в %s. Средняя з/п вырастет с %s до %s\n", dep.getKey(), avSalBefore, avSalAfter));
             }
         }
 
