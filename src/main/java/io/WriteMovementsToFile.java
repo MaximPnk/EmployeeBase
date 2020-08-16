@@ -32,9 +32,7 @@ public class WriteMovementsToFile {
                 continue;
             }
 
-            Set<Employee> copy = new TreeSet<>(startDep.getIncludedEmployees());
-
-            for (Employee empl : copy) {
+            for (Employee empl : new TreeSet<>(startDep.getIncludedEmployees())) {
 
                 salaryBeforeMoveInStartDep = startDep.averageDepartmentSalary();
                 startDep.getIncludedEmployees().remove(empl);
