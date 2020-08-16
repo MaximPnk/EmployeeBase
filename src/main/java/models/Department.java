@@ -7,6 +7,15 @@ import java.util.TreeSet;
 
 public class Department {
     private Set<Employee> includedEmployees = new TreeSet<>();
+    private String name;
+
+    public Department(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     public BigDecimal averageDepartmentSalary() {
         BigDecimal average, count = new BigDecimal("0"), summarySalary = new BigDecimal("0");
@@ -14,7 +23,7 @@ public class Department {
                 summarySalary = summarySalary.add(empl.getSalary());
                 count = count.add(BigDecimal.valueOf(1));
             }
-            average = summarySalary.divide(count, 2, RoundingMode.CEILING);
+            average = summarySalary.divide(count, 2, RoundingMode.HALF_UP);
         return average;
     }
 

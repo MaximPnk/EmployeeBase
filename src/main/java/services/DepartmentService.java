@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class DepartmentService {
     private static DepartmentService instance;
-    private Map<String, Department> departments = new HashMap();
+    private HashMap<String, Department> departments = new HashMap();
 
     private DepartmentService() {
     }
@@ -21,25 +21,19 @@ public class DepartmentService {
 
 //    Создание списка департаментов
     public Department checkIfDepartmentAlreadyCreated(String title) {
-        if (departments.get(title) != null) {
-            return departments.get(title);
-        }
-        Department department = new Department();
-        departments.put(title , department);
+        Department department = departments.getOrDefault(title, new Department(title));
+        departments.putIfAbsent(title, department);
         return department;
     }
 
     public void showAllDepartments() {
-        for (Map.Entry<String, Department> pair : departments.entrySet()) {
-            System.out.printf("%-40sСредняя з/п = %s\n", pair.getKey(), pair.getValue().averageDepartmentSalary());
+        for (Department dep : departments.values()) {
+            System.out.printf("%-40sСредняя з/п = %s\n", dep.getName(), dep.averageDepartmentSalary());
         }
+        System.out.println();
     }
 
     public Map<String, Department> getDepartments() {
         return departments;
-    }
-
-    public void setDepartments(Map<String, Department> departments) {
-        this.departments = departments;
     }
 }
