@@ -1,6 +1,6 @@
 package services;
 
-import models.Employee;
+import models.*;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -51,11 +51,17 @@ public class EmployeeService {
     }
 
     public void showEmployeesByDepartment(String depName) {
-        if (departmentService.getDepartments().containsKey(depName)) {
+        /*if (departmentService.getDepartments().containsKey(depName)) {
             for (Employee emp : departmentService.getDepartments().get(depName).getIncludedEmployees()) {
                 System.out.println(emp);
             }
+        }*/
+        for (Department dep : departmentService.getDepartments().values()) {
+            if (dep.getName().equals(depName)) {
+                dep.getIncludedEmployees().forEach(System.out::println);
+            }
         }
+
         System.out.println();
     }
 }

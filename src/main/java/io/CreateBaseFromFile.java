@@ -1,13 +1,9 @@
 package io;
 
-import models.Department;
-import models.Employee;
+import models.*;
 import services.DepartmentService;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 
 import static services.EmployeeService.employees;
@@ -21,7 +17,7 @@ public class CreateBaseFromFile {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             while (reader.ready()) {
                 line = reader.readLine();
-                isLineCorrect(line);
+                checkCorrectLine(line);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Файл с данными не найден");
@@ -31,17 +27,17 @@ public class CreateBaseFromFile {
         System.out.println();
     }
 
-    private static void isLineCorrect(String line) {
-        if (line.split("#").length == 5 && line.matches(".*[a-zA-Zа-яА-Я]+.*#.*#.*[a-zA-Zа-яА-Я]+.*#.*[a-zA-Zа-яА-Я]+.*#.*")) {
-            addNewEmp(line);
-        } else if (!line.isEmpty()) {
-            System.out.println("Данная строка не корректна: " + line);
-        }
-    }
+    private static void checkCorrectLine(String line) {
 
-    private static void addNewEmp(String line) {
+        if (!(line.split("#").length == 5 && line.matches(".*[a-zA-Zа-яА-Я]+.*#.*#.*[a-zA-Zа-яА-Я]+.*#.*[a-zA-Zа-яА-Я]+.*#.*"))) {
+            if (!line.isEmpty()) {
+                System.out.println("Данная строка не корректна: " + line);
+            }
+            return;
+        }
+
         String name, email, position;
-        Department department;
+        String department;
         BigDecimal salary;
 
         name = line.split("#")[0].trim();
@@ -50,6 +46,8 @@ public class CreateBaseFromFile {
         if (!email.matches("[\\w]*@[a-zA-Z]*\\.(com|ru|net)")) {
             email = "INVALID EMAIL";
         }
+
+        department = line.split("#")[2].trim();
 
         position = line.split("#")[3].trim();
 
@@ -67,7 +65,11 @@ public class CreateBaseFromFile {
             return;
         }
 
-        department = departmentService.checkIfDepartmentAlreadyCreated(line.split("#")[2].trim());
+        addNewEmplAndDep(department, name, email, position, salary);
+    }
+
+    public static void addNewEmplAndDep(String dep, String name, String email, String position, BigDecimal salary) {
+        Department department = departmentService.checkIfDepartmentAlreadyCreated(dep);
         Employee tmpEmp = new Employee(name, email, position, salary);
         employees.add(tmpEmp);
         department.getIncludedEmployees().add(tmpEmp);

@@ -1,84 +1,58 @@
 package io;
 
-import models.Department;
-import models.Employee;
+import models.*;
 import services.DepartmentService;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
-import java.util.Set;
-import java.util.TreeSet;
+import java.math.RoundingMode;
 
 public class WriteMovementsToFile {
     public static DepartmentService departmentService = DepartmentService.getInstance();
-    private static String file;
 
     public static void whereEmpCanMove(String fileName) {
-        file = fileName;
-        clear();
 
         BigDecimal salaryBeforeMoveInStartDep;
         BigDecimal salaryAfterMoveInStartDep;
-        BigDecimal differenceInStartDep;
         BigDecimal salaryBeforeMoveInFinishDep;
         BigDecimal salaryAfterMoveInFinishDep;
-        BigDecimal differenceInFinishDep;
 
-        for (Department startDep : departmentService.getDepartments().values()) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write("");
+            for (Department startDep : departmentService.getDepartments().values()) {
 
-            if (startDep.getIncludedEmployees().size() < 2) {
-                continue;
-            }
-
-            for (Employee empl : new TreeSet<>(startDep.getIncludedEmployees())) {
-
-                salaryBeforeMoveInStartDep = startDep.averageDepartmentSalary();
-                startDep.getIncludedEmployees().remove(empl);
-                salaryAfterMoveInStartDep = startDep.averageDepartmentSalary();
-                startDep.getIncludedEmployees().add(empl);
-                differenceInStartDep = salaryAfterMoveInStartDep.subtract(salaryBeforeMoveInStartDep);
-
-                if (differenceInStartDep.compareTo(new BigDecimal("0")) <= 0) {
+                if (startDep.getIncludedEmployees().size() < 2) {
                     continue;
                 }
 
-                for (Department finishDep : departmentService.getDepartments().values()) {
+                for (Employee empl : startDep.getIncludedEmployees()) {
 
-                    if (startDep == finishDep) {
+                    if (empl.getSalary().compareTo(startDep.averageDepartmentSalary()) >= 0) {
                         continue;
                     }
 
-                    salaryBeforeMoveInFinishDep = finishDep.averageDepartmentSalary();
-                    finishDep.getIncludedEmployees().add(empl);
-                    salaryAfterMoveInFinishDep = finishDep.averageDepartmentSalary();
-                    finishDep.getIncludedEmployees().remove(empl);
-                    differenceInFinishDep = salaryAfterMoveInFinishDep.subtract(salaryBeforeMoveInFinishDep);
+                    salaryBeforeMoveInStartDep = startDep.averageDepartmentSalary();
+                    salaryAfterMoveInStartDep = salaryBeforeMoveInStartDep.multiply(new BigDecimal(startDep.getIncludedEmployees().size())).subtract(empl.getSalary()).divide(new BigDecimal(String.valueOf(startDep.getIncludedEmployees().size()-1)), 2, RoundingMode.HALF_UP);
 
-                    if (differenceInFinishDep.compareTo(new BigDecimal("0")) <= 0) {
-                        continue;
+                    for (Department finishDep : departmentService.getDepartments().values()) {
+
+                        if (startDep == finishDep || empl.getSalary().compareTo(finishDep.averageDepartmentSalary()) <= 0) {
+                            continue;
+                        }
+
+                        salaryBeforeMoveInFinishDep = finishDep.averageDepartmentSalary();
+                        salaryAfterMoveInFinishDep = salaryBeforeMoveInFinishDep.multiply(new BigDecimal(finishDep.getIncludedEmployees().size())).add(empl.getSalary()).divide(new BigDecimal(String.valueOf(finishDep.getIncludedEmployees().size()+1)), 2, RoundingMode.HALF_UP);
+
+                        writeMove(writer, empl.getName(), startDep.getName(), finishDep.getName(), salaryBeforeMoveInStartDep, salaryAfterMoveInStartDep, salaryBeforeMoveInFinishDep, salaryAfterMoveInFinishDep);
                     }
-
-                    writeMove(String.format("%s можно переместить из %s в %s. З/п вырастет с %s до %s и с %s до %s соответственно\n", empl.getName(), startDep.getName(), finishDep.getName(), salaryBeforeMoveInStartDep, salaryAfterMoveInStartDep, salaryBeforeMoveInFinishDep, salaryAfterMoveInFinishDep));
                 }
             }
-        }
-    }
-
-    private static void writeMove(String text) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-            writer.write(text);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void clear() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private static void writeMove(BufferedWriter writer, String emplName, String startDepName, String finishDepName, BigDecimal salaryBeforeInStart, BigDecimal salaryAfterInStart, BigDecimal salaryBeforeInFinish, BigDecimal salaryAfterInFinish) throws IOException {
+        writer.append(String.format("%s можно переместить из %s в %s. З/п вырастет с %s до %s и с %s до %s соответственно\n", emplName, startDepName, finishDepName, salaryBeforeInStart, salaryAfterInStart, salaryBeforeInFinish, salaryAfterInFinish));
     }
 }

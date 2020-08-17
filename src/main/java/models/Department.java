@@ -18,12 +18,11 @@ public class Department {
     }
 
     public BigDecimal averageDepartmentSalary() {
-        BigDecimal average, count = new BigDecimal("0"), summarySalary = new BigDecimal("0");
-            for (Employee empl : includedEmployees) {
-                summarySalary = summarySalary.add(empl.getSalary());
-                count = count.add(BigDecimal.valueOf(1));
-            }
-            average = summarySalary.divide(count, 2, RoundingMode.HALF_UP);
+        BigDecimal average, summarySalary = new BigDecimal("0");
+        for (Employee empl : includedEmployees) {
+            summarySalary = summarySalary.add(empl.getSalary());
+        }
+        average = summarySalary.divide(new BigDecimal(includedEmployees.size()), 2, RoundingMode.HALF_UP);
         return average;
     }
 
