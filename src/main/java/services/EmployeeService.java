@@ -61,7 +61,6 @@ public class EmployeeService {
                 dep.getIncludedEmployees().forEach(System.out::println);
             }
         }
-
         System.out.println();
     }
 }
