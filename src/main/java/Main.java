@@ -15,7 +15,7 @@ public class Main {
             employeeService.showEmployeesByDepartment(depName);
             WriteMovementsToFile.whereEmpCanMove(args[1]);
             //2 рабочих метода. Первый перебирает 2^n-1 вариантов с помощью цикла. Второй перебирает только активные через рекурсию.
-            WriteMovementsToFile.openWriterAndMove((int) Math.pow(2, EmployeeService.employees.size()) - 1, args[1]);
+            WriteMovementsToFile.whileAlgorithm((int) Math.pow(2, EmployeeService.employees.size()) - 1, args[1]);
             WriteMovementsToFile.recursionAlgorithm(args[1]);
         }
     }
