@@ -2,12 +2,10 @@ package io;
 
 import models.*;
 import services.DepartmentService;
-import services.EmployeeService;
 
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.*;
 
 public class WriteMovementsToFile {
     public static DepartmentService departmentService = DepartmentService.getInstance();
@@ -58,7 +56,12 @@ public class WriteMovementsToFile {
         writer.append(String.format("%s можно переместить из %s в %s. З/п вырастет с %s до %s и с %s до %s соответственно\n", emplName, startDepName, finishDepName, salaryBeforeInStart, salaryAfterInStart, salaryBeforeInFinish, salaryAfterInFinish));
     }
 
-    //перебор 2^n-1
+
+
+
+
+
+    /*//перебор 2^n-1
     public static void whileAlgorithm(int num, String fileName) {
         //получаем множество 001 010 011 100 101 110 111
         //если элемент i-ый элемент = 1, то пробуем ему поменять департамент
@@ -275,7 +278,7 @@ public class WriteMovementsToFile {
         //изменяем порядок в списке эмплоев
         //не получится, не обязательно иметь такое же кол-во сотрудников, которое было изначально
         ArrayList<Employee> list = new ArrayList<>(EmployeeService.employees); //стартовый лист, который содержит постоянные департаменты в ячейках
-        ArrayList<Employee> newList = WrongMethod2(list); //лист, полученный после перебора //TODO
+        ArrayList<Employee> newList = WrongMethod2(list); //лист, полученный после перебора
 
         Department startDep = null, finishDep = null;
 
@@ -334,5 +337,5 @@ public class WriteMovementsToFile {
         }
         a--;
         return foo(a);
-    }
+    }*/
 }
