@@ -70,15 +70,16 @@ public class WriteSummaryMovementsToFile {
             return;
         }
 
+        List<String> resultEmpsList = new ArrayList<>();
         write(writer, String.format("Откуда: %s. З/п перед = %s, з/п после = %s\n", startDep.getName(), salaryBeforeMoveInStartDep, salaryAfterMoveInStartDep));
         write(writer, String.format("Куда: %s. З/п перед = %s, з/п после = %s\n", finishDep.getName(), salaryBeforeMoveInFinishDep, salaryAfterMoveInFinishDep));
         write(writer, "Сотрудники: ");
         for (int i = 0; i < empsList.size(); i++) {
             if (binaryList.get(i).equals("1")) {
-                write(writer, empsList.get(i).getName() + " / ");
+                resultEmpsList.add(empsList.get(i).getName());
             }
         }
-        write(writer, System.lineSeparator() + System.lineSeparator());
+        write(writer, String.join(", ", resultEmpsList) + System.lineSeparator() + System.lineSeparator());
 
         recursion(startDep, finishDep, --binaryLength, empsList, writer);
     }
