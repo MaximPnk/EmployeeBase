@@ -11,7 +11,7 @@ public class Main {
             CreateBaseFromFile.readFromFile(args[0]);
             employeeService.showAllEmployeesInfo();
             departmentService.showAllDepartments();
-            String depName = "Отдел продвижения";
+            String depName = "Департамент развития производства";
             employeeService.showEmployeesByDepartment(depName);
             WriteMovementsToFile.whereEmpCanMove(args[1]);
             WriteSummaryMovementsToFile.summaryMovements(args[1]);
